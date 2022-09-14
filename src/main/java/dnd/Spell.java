@@ -1,21 +1,33 @@
 package dnd;
 
-public class Spell {
+public class Spell extends ProficiencyItem {
 
-    public int strength;
-    public int accuracy;
-    public String effect;
+    private double durationMinutes;
+    private String type;
 
-
-    public int causeDamage(Character target) {
-        return strength;
+    public Spell(String name, int strength, int rangeInMeters) {
+        super(name, strength, rangeInMeters);
+    }
+    public Spell(String name, int strength, int rangeInMeters, double durationMinutes, String type) {
+        super(name, strength, rangeInMeters);
+        this.durationMinutes = durationMinutes;
+        this.type = type;
     }
 
-    public int heal(Character target) {
-        return strength;
+
+    public double getDurationMinutes() {
+        return durationMinutes;
     }
 
-    public void takeEffect() {
-        System.out.println(effect);
+    public void setDurationMinutes(double durationMinutes) {
+        this.durationMinutes = durationMinutes;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
