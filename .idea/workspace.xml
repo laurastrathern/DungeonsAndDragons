@@ -4,16 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06808499-00cc-43e8-9eed-335d1c4b2e38" name="Changes" comment="Initial Commit">
-      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/Dice.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/DndApp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/ProficiencyItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/SpellBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/Weapon.java" afterDir="false" />
+    <list default="true" id="06808499-00cc-43e8-9eed-335d1c4b2e38" name="Changes" comment="Second Commit">
+      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/Location.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Character.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Character.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Dice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Dice.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Spell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Spell.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +91,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663000004876</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Second Commit">
+      <created>1663184578152</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1663184578152</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -112,7 +114,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial Commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial Commit" />
+    <MESSAGE value="Second Commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Second Commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

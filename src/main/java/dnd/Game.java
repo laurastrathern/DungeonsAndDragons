@@ -1,5 +1,6 @@
 package dnd;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
 
@@ -7,8 +8,10 @@ public class Game {
 
     Scanner input = new Scanner(System.in);
 
-    LinkedHashMap<Integer, Character> characterMap = new LinkedHashMap<Integer, Character>();
-    LinkedHashMap<Integer, String> actionMap = new LinkedHashMap<Integer, String>();
+    LinkedHashMap<Integer, Character> characterMap = new LinkedHashMap<>();
+    LinkedHashMap<Integer, String> actionMap = new LinkedHashMap<>();
+
+    ArrayList<Dice> diceList = new ArrayList<>();
 
     public void beginGame() {
         System.out.println("A new game has begun.");
