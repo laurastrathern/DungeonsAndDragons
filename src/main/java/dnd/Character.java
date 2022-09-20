@@ -1,6 +1,7 @@
 package dnd;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Random;
 
 public class Character {
@@ -69,13 +70,13 @@ public class Character {
         System.out.println(this.forename + " turned to " + target.getForename() + " and said \"" + dialogue + "\"");
     }
 
-    public void castSpellOnCharacter(Character target, Spell spell) {
+    public void castSpellOnCharacter(Character target, Spell spell, LinkedHashMap<String, Dice> diceMap) {
         switch(spell.getType()) {
             case "Heal":
                 target.regainHealth(spell.getStrength());
                 break;
             case "Attack":
-                attack(target, spell);
+                attack(target, spell, diceMap);
                 break;
             case "Other":
 
@@ -84,25 +85,19 @@ public class Character {
 
     }
 
-    public void attack(Character target, ProficiencyItem attackItem) {
+    public void attack(Character target, ProficiencyItem attackItem, LinkedHashMap<String, Dice> diceMap) {
 
-        Random dice = new Random();
-        int roll = dice.nextInt(21);
-
-        int attackStrength = roll;
+        int attackStrength = diceMap.get("d20").roll();
         if (attackItem instanceof Spell) {
-            System.out.println("You rolled " + roll + " to cast a spell, with wisdom modifier " + getWisdom());
+            System.out.println("You rolled " + attackStrength + " to cast a spell, with wisdom modifier " + getWisdom());
             attackStrength += getWisdom();
         } else if (attackItem instanceof Weapon) {
-            System.out.println("You rolled " + roll + " to attack, with strength modifier " + getStrength());
+            System.out.println("You rolled " + attackStrength + " to attack, with strength modifier " + getStrength());
              attackStrength += getStrength();
         }
 
         if (isSuccessfulHit(target, attackStrength)) {
-
-            int damage = causeDamage(attackItem, target);
-
-
+            causeDamage(attackItem, target, diceMap.get("d8"));
         }
         else {
             System.out.println("Attack failed.");
@@ -113,13 +108,11 @@ public class Character {
         return attackStrength >= target.armourClass;
     }
 
-    public int causeDamage(ProficiencyItem attackItem, Character target) {
+    public int causeDamage(ProficiencyItem attackItem, Character target, Dice die) {
         System.out.println(target.forename + " is hit.");
 
-        Random dice = new Random();
-        int roll = dice.nextInt(7);
-
-        int damage  = roll + attackItem.getStrength();
+        int roll = die.roll();
+        int damage  =  roll + attackItem.getStrength();
         System.out.println(this.getForename() + " rolled " + roll + " with an attack bonus of " + attackItem.getStrength());
         target.takeDamage(damage);
         return damage;
@@ -148,13 +141,13 @@ public class Character {
         int remainingThrows = 5 - (getFailedDeathSavingThrows() + getSucceededDeathSavingThrows());
         if (savingRoll <= 1) {
             setFailedDeathSavingThrows(getFailedDeathSavingThrows()-2);
-            System.out.println(getForename() + " has rolled " + savingRoll + " and has failed 2 death saving throws this round. Oops. They have " + remainingThrows + "throws remaining.");
+            System.out.println(getForename() + " has rolled " + savingRoll + " and has failed 2 death saving throws this round. Oops. They have " + remainingThrows + " throws remaining.");
         } else if (savingRoll > 1 && savingRoll < 10) {
             setFailedDeathSavingThrows(getFailedDeathSavingThrows()+1);
-            System.out.println(getForename() + " has rolled " + savingRoll + " and has failed 1 death saving throw.");
-        } else if (savingRoll > 9 && savingRoll > 20) {
+            System.out.println(getForename() + " has rolled " + savingRoll + " and has failed 1 death saving throw. They have " + remainingThrows + " throws remaining.");
+        } else if (savingRoll > 9 && savingRoll < 20) {
             setSucceededDeathSavingThrows(getSucceededDeathSavingThrows()+1);
-            System.out.println(getForename() + " has rolled " + savingRoll + " and has passed 1 death saving throw.");
+            System.out.println(getForename() + " has rolled " + savingRoll + " and has passed 1 death saving throw. They have " + remainingThrows + " throws remaining.");
         } else if (savingRoll >= 20) {
             setHitPoints(1);
             setUnconscious(false);

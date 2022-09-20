@@ -60,10 +60,10 @@ public class Game {
                             character.speak(getDialogue(), getChosenTarget());
                             break;
                         case 2:
-                            character.attack(getChosenTarget(), getChosenWeapon(character));
+                            character.attack(getChosenTarget(), getChosenWeapon(character), diceMap);
                             break;
                         case 3:
-                            character.castSpellOnCharacter(getChosenTarget(), getChosenSpell(character));
+                            character.castSpellOnCharacter(getChosenTarget(), getChosenSpell(character), diceMap);
                             break;
                         case 10:
                             character.setInactive(true);
