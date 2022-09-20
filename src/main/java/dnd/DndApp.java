@@ -6,8 +6,8 @@ public class DndApp {
 
         Game game = new Game();
 
-        Character character1 = new Character("Yksi", "Erdbeere", "Halfling", "Ranger", 25, 17, 4, -2);
-        Character character2 = new Character("Malinova", "Borboleta", "Triton", "Warlock", 20, 16, 3, 4);
+        Character character1 = new Character("Yksi", "Erdbeere", "Halfling", "Ranger", 25, 17, 4, -2, 2);
+        Character character2 = new Character("Malinova", "Borboleta", "Triton", "Warlock", 20, 16, 3, 4, 3);
 
         Weapon longBow = new Weapon("Long Bow", 3, 90);
         Weapon broadSword = new Weapon("Gina", 2, 5);
