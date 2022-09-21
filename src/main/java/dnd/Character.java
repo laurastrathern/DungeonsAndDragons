@@ -15,6 +15,7 @@ public class Character {
     private int spellSlots;
     private String alignment;
     private int hitPoints;
+    private int maxHitPoints;
     private int armourClass;
     private ArrayList<Weapon> weapons = new ArrayList<Weapon>();
 
@@ -37,6 +38,18 @@ public class Character {
     private int failedDeathSavingThrows;
 
     private int temporaryHitPoints;
+    LinkedHashMap<String, Dice> diceMap = new LinkedHashMap<>();
+
+    public void setDiceMap() {
+        Dice d20 = new Dice(20);
+        Dice d10 = new Dice(10);
+        Dice d8 = new Dice(8);
+        Dice d6 = new Dice(6);
+        diceMap.put("d20", d20);
+        diceMap.put("d10", d10);
+        diceMap.put("d8", d8);
+        diceMap.put("d6", d6);
+    }
 
     public Character(String forename, String surname, String race, String adventurerClass, int hitPoints, int armourClass, int strength, int charisma, int wisdom) {
         this.forename = forename;
@@ -44,10 +57,12 @@ public class Character {
         this.race = race;
         this.adventurerClass = adventurerClass;
         this.hitPoints = hitPoints;
+        this.maxHitPoints = hitPoints;
         this.armourClass = armourClass;
         this.strength = strength;
         this.charisma = charisma;
         this.wisdom = wisdom;
+        setDiceMap();
     }
 
     public Character(boolean isNPC, String forename, String surname, String race, String adventurerClass, int hitPoints, int armourClass, int strength, int charisma, int wisdom) {
@@ -61,19 +76,20 @@ public class Character {
         this.strength = strength;
         this.charisma = charisma;
         this.wisdom = wisdom;
+        setDiceMap();
     }
 
     public void speak(String dialogue, Character target) {
         System.out.println(this.forename + " turned to " + target.getForename() + " and said \"" + dialogue + "\"");
     }
 
-    public void castSpellOnCharacter(Character target, Spell spell, LinkedHashMap<String, Dice> diceMap) {
+    public void castSpellOnCharacter(Character target, Spell spell) {
         switch(spell.getType()) {
             case "Heal":
-                heal(target, spell, diceMap);
+                healACharacter(target, spell);
                 break;
             case "Attack":
-                attack(target, spell, diceMap);
+                attack(target, spell);
                 break;
             case "Other":
 
@@ -82,12 +98,12 @@ public class Character {
 
     }
 
-    public void attack(Character target, ProficiencyItem attackItem, LinkedHashMap<String, Dice> diceMap) {
+    public void attack(Character target, ProficiencyItem attackItem) {
 
         int attackStrength = diceMap.get("d20").roll();
         attackStrength = addModifier(attackItem, attackStrength);
 
-        if (isSuccessfulHit(target, attackStrength)) {
+        if (hitSuccessful(target, attackStrength)) {
             causeDamage(attackItem, target, diceMap.get("d8"));
         }
         else {
@@ -106,12 +122,12 @@ public class Character {
         return actionStrength;
     }
 
-    private boolean isSuccessfulHit(Character target, int attackStrength) {
-        return attackStrength >= target.armourClass;
+    private boolean hitSuccessful(Character target, int attackStrength) {
+        return attackStrength >= target.getArmourClass();
     }
 
     public int causeDamage(ProficiencyItem attackItem, Character target, Dice die) {
-        System.out.println(target.forename + " is hit.");
+        System.out.println(target.getForename() + " is hit.");
 
         int roll = die.roll();
         int damage  =  roll + attackItem.getStrength();
@@ -131,7 +147,7 @@ public class Character {
         }
     }
 
-    public void heal(Character target, ProficiencyItem healingItem, LinkedHashMap<String, Dice> diceMap) {
+    public void healACharacter(Character target, ProficiencyItem healingItem) {
 
         int healingStrength = diceMap.get("d20").roll();
         healingStrength = addModifier(healingItem, healingStrength);
@@ -154,9 +170,9 @@ public class Character {
         }
     }
 
-    public void makeDeathSave(Dice die) {
+    public void makeDeathSave() {
 
-        int savingRoll = die.roll();
+        int savingRoll = diceMap.get("d20").roll();
         int remainingThrows = 5 - (getFailedDeathSavingThrows() + getSucceededDeathSavingThrows());
         if (savingRoll <= 1) {
             setFailedDeathSavingThrows(getFailedDeathSavingThrows()+2);
@@ -198,6 +214,14 @@ public class Character {
     }
 
     public void intimidate(Character target) {
+
+    }
+
+    public void takeLongRest() {
+        setHitPoints(maxHitPoints);
+    }
+
+    public void takeShortRest() {
 
     }
 

@@ -10,15 +10,13 @@ public class Game {
 
     LinkedHashMap<Integer, Character> characterMap = new LinkedHashMap<>();
     LinkedHashMap<Integer, String> actionMap = new LinkedHashMap<>();
-    LinkedHashMap<String, Dice> diceMap = new LinkedHashMap<>();
+
 
     public void beginGame() {
         System.out.println("A new game has begun.");
         generateNPC();
         setActionMap();
-        setDiceMap();
         getCharacterAction();
-
 
     }
 
@@ -36,23 +34,13 @@ public class Game {
     }
 
 
-    public void setDiceMap() {
-        Dice d20 = new Dice(20);
-        Dice d10 = new Dice(10);
-        Dice d8 = new Dice(8);
-        Dice d6 = new Dice(6);
-        diceMap.put("d20", d20);
-        diceMap.put("d10", d10);
-        diceMap.put("d8", d8);
-        diceMap.put("d6", d6);
-    }
 
     public void getCharacterAction() {
         while (activePlayerInGame()) {
             for (Character character: characterMap.values()) {
                 System.out.println("\n");
                 if (character.isUnconscious()) {
-                    getDeathSave(character, diceMap.get("d20"));
+                    getDeathSave(character);
                 }
                 else {
                     switch (getChosenAction(character)) {
@@ -60,10 +48,16 @@ public class Game {
                             character.speak(getDialogue(), getChosenTarget());
                             break;
                         case 2:
-                            character.attack(getChosenTarget(), getChosenWeapon(character), diceMap);
+                            character.attack(getChosenTarget(), getChosenWeapon(character));
                             break;
                         case 3:
-                            character.castSpellOnCharacter(getChosenTarget(), getChosenSpell(character), diceMap);
+                            character.castSpellOnCharacter(getChosenTarget(), getChosenSpell(character));
+                            break;
+                        case 7:
+                            character.takeShortRest();
+                            break;
+                        case 8:
+                            character.takeLongRest();
                             break;
                         case 10:
                             character.setInactive(true);
@@ -72,6 +66,7 @@ public class Game {
                 }
             }
             removeExitedCharacters();
+            addNewCharacters();
         }
     }
 
@@ -158,12 +153,12 @@ public class Game {
     }
 
 
-    public void getDeathSave(Character character, Dice die) {
+    public void getDeathSave(Character character) {
         System.out.println("Hello " + character.getForename() + ". Press 1 to try to save yourself from death. Alternatively, press 2 to do nothing.");
         int deathSave = input.nextInt();
 
         if (deathSave == 1) {
-            character.makeDeathSave(die);
+            character.makeDeathSave();
         }
         else {
             System.out.println("You choose to do nothing." );
@@ -189,6 +184,15 @@ public class Game {
         }
         for (Integer key: characterKey) {
             characterMap.remove(key);
+        }
+
+    }
+
+    public void addNewCharacters() {
+        System.out.println("To add new characters to the game, press 1.  To continue, press 2");
+        int newCharacters = input.nextInt();
+        if (newCharacters == 1) {
+            System.out.println("Enter the details in the following format: (String forename, String surname, String race, String adventurerClass, int hitPoints, int armourClass, int strength, int charisma, int wisdom)");
         }
 
     }
