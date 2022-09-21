@@ -120,15 +120,15 @@ public class Game {
         StringBuilder weaponsOptions = new StringBuilder("");
 
         for (Weapon weapon: character.getWeapons()) {
-            weaponsOptions.append("Press " + character.getWeapons().indexOf(weapon) + " to select " + weapon.getName() + ". ");
+            int weaponKey = character.getWeapons().indexOf(weapon) + 1;
+            weaponsOptions.append("Press " +  weaponKey + " to select " + weapon.getName() + ". ");
         }
-
         System.out.println(weaponsOptions);
     }
 
     public Weapon getChosenWeapon(Character character) {
         provideWeaponsOptions(character);
-        int weapon = input.nextInt();
+        int weapon = input.nextInt() - 1;
         Weapon chosenWeapon = character.getWeapons().get(weapon);
         return chosenWeapon;
     }
@@ -137,7 +137,8 @@ public class Game {
         StringBuilder spellOptions = new StringBuilder("");
 
         for (Spell spell: character.getSpells()) {
-            spellOptions.append("Press " + character.getSpells().indexOf(spell) + " to select " + spell.getName() + ". ");
+            int spellKey = character.getSpells().indexOf(spell) + 1;
+            spellOptions.append("Press " + spellKey + " to select " + spell.getName() + ". ");
         }
 
         System.out.println(spellOptions);
@@ -145,7 +146,7 @@ public class Game {
 
     public Spell getChosenSpell(Character character) {
         provideSpellOptions(character);
-        int spell = input.nextInt();
+        int spell = input.nextInt() - 1;
         Spell chosenSpell = character.getSpells().get(spell);
         return chosenSpell;
     }
@@ -208,8 +209,8 @@ public class Game {
         Weapon crossBow = new Weapon("Selina", 4, 100);
 
         Spell spell1 = new Spell("Acid Splash", 5, 27, 5, "Attack");
-        Spell spell2 = new Spell("Animal Friendship", 4,5);
-        Spell spell3 = new Spell("Anti-magic Field", 5,50);
+        Spell spell2 = new Spell("Animal Friendship", 4,5, 60, "Other");
+        Spell spell3 = new Spell("Anti-magic Field", 5,50, 60, "Other");
         Spell spell4 = new Spell("Black Tentacles", 4, 27, 1, "Attack");
         Spell spell5 = new Spell("Snilloc's Snowball Swarm", 6, 30, 5, "Attack");
         Spell spell6 = new Spell("Aura of Vitality", 4, 20, 1, "Heal");

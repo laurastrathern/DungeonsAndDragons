@@ -7,7 +7,7 @@ public class DndApp {
         Game game = new Game();
 
         Character character1 = new Character("Yksi", "Erdbeere", "Halfling", "Ranger", 25, 17, 4, -2, 2);
-        Character character2 = new Character("Malinova", "Borboleta", "Triton", "Warlock", 20, 16, 3, 4, 3);
+        Character character2 = new Character("Malinova", "Borboleta", "Triton", "Warlock", 23, 16, 3, 4, 3);
 
         Weapon longBow = new Weapon("Long Bow", 3, 90);
         Weapon broadSword = new Weapon("Gina", 2, 5);
@@ -22,8 +22,8 @@ public class DndApp {
 //        Spell spell5 = new SpellBuilder().setName("Snilloc's Snowball Swarm").setStrength(6).setRangeInMeters(30).createSpell();
 
         Spell spell1 = new Spell("Acid Splash", 5, 27, 5, "Attack");
-        Spell spell2 = new Spell("Animal Friendship", 4,5);
-        Spell spell3 = new Spell("Anti-magic Field", 5,50);
+        Spell spell2 = new Spell("Animal Friendship", 4,5, 60, "Other");
+        Spell spell3 = new Spell("Anti-magic Field", 5,50, 60, "Other");
         Spell spell4 = new Spell("Black Tentacles", 4, 27, 1, "Attack");
         Spell spell5 = new Spell("Snilloc's Snowball Swarm", 6, 30, 5, "Attack");
         Spell spell6 = new Spell("Aura of Vitality", 4, 20, 1, "Heal");

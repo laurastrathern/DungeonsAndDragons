@@ -17,7 +17,9 @@ public class Dice {
     public int roll() {
         Random random = new Random();
         int maximumRoll = getSides()+1;
-        int roll = random.nextInt(maximumRoll);
+        int minimumRoll = 1;
+        //int roll = random.nextInt(maximumRoll);
+        int roll = random.ints(minimumRoll, maximumRoll).findFirst().getAsInt();
         return roll;
     }
 }

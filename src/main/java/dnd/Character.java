@@ -2,7 +2,6 @@ package dnd;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Random;
 
 public class Character {
     private boolean isInactive;
@@ -49,7 +48,6 @@ public class Character {
         this.strength = strength;
         this.charisma = charisma;
         this.wisdom = wisdom;
-        this.succeededDeathSavingThrows = 3;
     }
 
     public Character(boolean isNPC, String forename, String surname, String race, String adventurerClass, int hitPoints, int armourClass, int strength, int charisma, int wisdom) {
@@ -63,7 +61,6 @@ public class Character {
         this.strength = strength;
         this.charisma = charisma;
         this.wisdom = wisdom;
-        this.succeededDeathSavingThrows = 3;
     }
 
     public void speak(String dialogue, Character target) {
@@ -73,7 +70,7 @@ public class Character {
     public void castSpellOnCharacter(Character target, Spell spell, LinkedHashMap<String, Dice> diceMap) {
         switch(spell.getType()) {
             case "Heal":
-                target.regainHealth(spell.getStrength());
+                heal(target, spell, diceMap);
                 break;
             case "Attack":
                 attack(target, spell, diceMap);
@@ -88,13 +85,7 @@ public class Character {
     public void attack(Character target, ProficiencyItem attackItem, LinkedHashMap<String, Dice> diceMap) {
 
         int attackStrength = diceMap.get("d20").roll();
-        if (attackItem instanceof Spell) {
-            System.out.println("You rolled " + attackStrength + " to cast a spell, with wisdom modifier " + getWisdom());
-            attackStrength += getWisdom();
-        } else if (attackItem instanceof Weapon) {
-            System.out.println("You rolled " + attackStrength + " to attack, with strength modifier " + getStrength());
-             attackStrength += getStrength();
-        }
+        attackStrength = addModifier(attackItem, attackStrength);
 
         if (isSuccessfulHit(target, attackStrength)) {
             causeDamage(attackItem, target, diceMap.get("d8"));
@@ -102,6 +93,17 @@ public class Character {
         else {
             System.out.println("Attack failed.");
         }
+    }
+
+    private int addModifier(ProficiencyItem actionItem, int actionStrength) {
+        if (actionItem instanceof Spell) {
+            System.out.println("You rolled " + actionStrength + " to cast a spell, with wisdom modifier " + getWisdom());
+            actionStrength += getWisdom();
+        } else if (actionItem instanceof Weapon) {
+            System.out.println("You rolled " + actionStrength + " to attack, with strength modifier " + getStrength());
+             actionStrength += getStrength();
+        }
+        return actionStrength;
     }
 
     private boolean isSuccessfulHit(Character target, int attackStrength) {
@@ -129,10 +131,27 @@ public class Character {
         }
     }
 
+    public void heal(Character target, ProficiencyItem healingItem, LinkedHashMap<String, Dice> diceMap) {
+
+        int healingStrength = diceMap.get("d20").roll();
+        healingStrength = addModifier(healingItem, healingStrength);
+
+        if (healingStrength >= 11) {
+            target.regainHealth(healingItem.getStrength());
+        }
+        else {
+            System.out.println("Spell failed.");
+        }
+    }
+
     public void regainHealth(int health) {
 
         setHitPoints(getHitPoints()+health);
         System.out.println(getForename() + " has gained " + health + " points of healing, and now has " + getHitPoints() + " hit points remaining.");
+        if (isUnconscious && getHitPoints() >= 1) {
+            setUnconscious(false);
+            System.out.println(getForename() + " has regained consciousness.  Hopefully they are not concussed.");
+        }
     }
 
     public void makeDeathSave(Dice die) {
@@ -140,14 +159,33 @@ public class Character {
         int savingRoll = die.roll();
         int remainingThrows = 5 - (getFailedDeathSavingThrows() + getSucceededDeathSavingThrows());
         if (savingRoll <= 1) {
-            setFailedDeathSavingThrows(getFailedDeathSavingThrows()-2);
-            System.out.println(getForename() + " has rolled " + savingRoll + " and has failed 2 death saving throws this round. Oops. They have " + remainingThrows + " throws remaining.");
+            setFailedDeathSavingThrows(getFailedDeathSavingThrows()+2);
+            remainingThrows -= 2;
+            System.out.println(getForename() + " has rolled " + savingRoll + " and the death saving throw has failed doubly. Oops. They have " + remainingThrows + " throws remaining, and a total of "
+                    + getSucceededDeathSavingThrows() + " succeeded throws, and " + getFailedDeathSavingThrows() + " failed throws.");
+            if(getFailedDeathSavingThrows() >= 3) {
+                System.out.println(getForename() + " has failed 3 death saving throws and has died forever.");
+                setInactive(true);
+            }
         } else if (savingRoll > 1 && savingRoll < 10) {
             setFailedDeathSavingThrows(getFailedDeathSavingThrows()+1);
-            System.out.println(getForename() + " has rolled " + savingRoll + " and has failed 1 death saving throw. They have " + remainingThrows + " throws remaining.");
+            remainingThrows -= 1;
+            System.out.println(getForename() + " has rolled " + savingRoll + " and the death saving throw has failed. They have " + remainingThrows + " throws remaining, and a total of "
+                    + getSucceededDeathSavingThrows() + " succeeded throws, and " + getFailedDeathSavingThrows() + " failed throws.");
+            if(getFailedDeathSavingThrows() >= 3) {
+                System.out.println(getForename() + " has failed 3 death saving throws and has died forever.");
+                setInactive(true);
+            }
         } else if (savingRoll > 9 && savingRoll < 20) {
             setSucceededDeathSavingThrows(getSucceededDeathSavingThrows()+1);
-            System.out.println(getForename() + " has rolled " + savingRoll + " and has passed 1 death saving throw. They have " + remainingThrows + " throws remaining.");
+            remainingThrows -= 1;
+            System.out.println(getForename() + " has rolled " + savingRoll + " and the death saving throw has succeeded. They have " + remainingThrows + " throws remaining, and a total of "
+                    + getSucceededDeathSavingThrows() + " succeeded throws, and " + getFailedDeathSavingThrows() + " failed throws.");
+            if(getSucceededDeathSavingThrows() >= 3) {
+                setHitPoints(1);
+                setUnconscious(false);
+                System.out.println(getForename() + " has passed 3 death saving throws and regained consciousness.");
+            }
         } else if (savingRoll >= 20) {
             setHitPoints(1);
             setUnconscious(false);
