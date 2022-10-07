@@ -3,17 +3,18 @@ package dnd;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class Character {
+public abstract class Character {
     private boolean isInactive;
     private boolean isNPC;
     private String forename;
     private String surname;
     private String race;
-    private String adventurerClass;
 
     private int level;
     private int spellSlots;
     private String alignment;
+
+    private int baseHitPoints;
     private int hitPoints;
     private int maxHitPoints;
     private int armourClass;
@@ -37,7 +38,12 @@ public class Character {
 
     private int failedDeathSavingThrows;
 
+    private final int maxDeathSavingThrows = 5;
+
     private int temporaryHitPoints;
+
+    private int columnLocation;
+    private int rowLocation;
     LinkedHashMap<String, Dice> diceMap = new LinkedHashMap<>();
 
     public void setDiceMap() {
@@ -51,36 +57,21 @@ public class Character {
         diceMap.put("d6", d6);
     }
 
-    public Character(String forename, String surname, String race, String adventurerClass, int hitPoints, int armourClass, int strength, int charisma, int wisdom) {
+    public Character(String forename, String surname, String race, int armourClass, int strength, int charisma, int wisdom, int constitution) {
         this.forename = forename;
         this.surname = surname;
         this.race = race;
-        this.adventurerClass = adventurerClass;
-        this.hitPoints = hitPoints;
+
+        this.armourClass = armourClass;
+        this.strength = strength;
+        this.charisma = charisma;
+        this.wisdom = wisdom;
+        this.constitution = constitution;
+
+        this.hitPoints = baseHitPoints + constitution;
         this.maxHitPoints = hitPoints;
-        this.armourClass = armourClass;
-        this.strength = strength;
-        this.charisma = charisma;
-        this.wisdom = wisdom;
-        setDiceMap();
-    }
 
-    public Character(boolean isNPC, String forename, String surname, String race, String adventurerClass, int hitPoints, int armourClass, int strength, int charisma, int wisdom) {
-        this.isNPC = isNPC;
-        this.forename = forename;
-        this.surname = surname;
-        this.race = race;
-        this.adventurerClass = adventurerClass;
-        this.hitPoints = hitPoints;
-        this.armourClass = armourClass;
-        this.strength = strength;
-        this.charisma = charisma;
-        this.wisdom = wisdom;
         setDiceMap();
-    }
-
-    public void speak(String dialogue, Character target) {
-        System.out.println(this.forename + " turned to " + target.getForename() + " and said \"" + dialogue + "\"");
     }
 
     public void castSpellOnCharacter(Character target, Spell spell) {
@@ -92,6 +83,9 @@ public class Character {
                 attack(target, spell);
                 break;
             case "Other":
+                if (spell.getEffect() != null) {
+                    System.out.println(spell.getEffect());
+                }
 
                 break;
         }
@@ -101,10 +95,18 @@ public class Character {
     public void attack(Character target, ProficiencyItem attackItem) {
 
         int attackStrength = diceMap.get("d20").roll();
+
+        if (isIntimidated()) {
+            attackStrength = Math.min(attackStrength, diceMap.get("d20").roll());
+        }
+        if(target.isIntimidated() || target.isCharmed()) {
+            attackStrength = Math.max(attackStrength, diceMap.get("d20").roll());
+        }
+
         attackStrength = addModifier(attackItem, attackStrength);
 
-        if (hitSuccessful(target, attackStrength)) {
-            causeDamage(attackItem, target, diceMap.get("d8"));
+        if (target.hitSuccessful(attackStrength)) {
+            attackItem.causeDamage(target, diceMap.get("d8"));
         }
         else {
             System.out.println("Attack failed.");
@@ -122,18 +124,8 @@ public class Character {
         return actionStrength;
     }
 
-    private boolean hitSuccessful(Character target, int attackStrength) {
-        return attackStrength >= target.getArmourClass();
-    }
-
-    public int causeDamage(ProficiencyItem attackItem, Character target, Dice die) {
-        System.out.println(target.getForename() + " is hit.");
-
-        int roll = die.roll();
-        int damage  =  roll + attackItem.getStrength();
-        System.out.println(this.getForename() + " rolled " + roll + " with an attack bonus of " + attackItem.getStrength());
-        target.takeDamage(damage);
-        return damage;
+    private boolean hitSuccessful(int attackStrength) {
+        return attackStrength >= getArmourClass();
     }
 
     public void takeDamage(int damage) {
@@ -142,7 +134,7 @@ public class Character {
         }
         setHitPoints(getHitPoints()-damage);
         System.out.println(getForename() + " has taken " + damage + " points of damage, and now has " + getHitPoints() + " hit points remaining.");
-        if (isUnconscious) {
+        if (isUnconscious()) {
             System.out.println("Oh dear, it looks like " + getForename() + " has passed out, leaving all their belongings unguarded.");
         }
     }
@@ -153,6 +145,9 @@ public class Character {
         healingStrength = addModifier(healingItem, healingStrength);
 
         if (healingStrength >= 11) {
+            if (healingItem.getEffect() != null) {
+                System.out.println(healingItem.getEffect());
+            }
             target.regainHealth(healingItem.getStrength());
         }
         else {
@@ -164,65 +159,112 @@ public class Character {
 
         setHitPoints(getHitPoints()+health);
         System.out.println(getForename() + " has gained " + health + " points of healing, and now has " + getHitPoints() + " hit points remaining.");
-        if (isUnconscious && getHitPoints() >= 1) {
+        if (isUnconscious() && getHitPoints() >= 1) {
             setUnconscious(false);
             System.out.println(getForename() + " has regained consciousness.  Hopefully they are not concussed.");
         }
     }
 
     public void makeDeathSave() {
-
+        int remainingThrows = getMaxDeathSavingThrows() - (getFailedDeathSavingThrows() + getSucceededDeathSavingThrows());
         int savingRoll = diceMap.get("d20").roll();
-        int remainingThrows = 5 - (getFailedDeathSavingThrows() + getSucceededDeathSavingThrows());
-        if (savingRoll <= 1) {
-            setFailedDeathSavingThrows(getFailedDeathSavingThrows()+2);
-            remainingThrows -= 2;
-            System.out.println(getForename() + " has rolled " + savingRoll + " and the death saving throw has failed doubly. Oops. They have " + remainingThrows + " throws remaining, and a total of "
-                    + getSucceededDeathSavingThrows() + " succeeded throws, and " + getFailedDeathSavingThrows() + " failed throws.");
-            if(getFailedDeathSavingThrows() >= 3) {
-                System.out.println(getForename() + " has failed 3 death saving throws and has died forever.");
-                setInactive(true);
-            }
-        } else if (savingRoll > 1 && savingRoll < 10) {
-            setFailedDeathSavingThrows(getFailedDeathSavingThrows()+1);
-            remainingThrows -= 1;
-            System.out.println(getForename() + " has rolled " + savingRoll + " and the death saving throw has failed. They have " + remainingThrows + " throws remaining, and a total of "
-                    + getSucceededDeathSavingThrows() + " succeeded throws, and " + getFailedDeathSavingThrows() + " failed throws.");
-            if(getFailedDeathSavingThrows() >= 3) {
-                System.out.println(getForename() + " has failed 3 death saving throws and has died forever.");
-                setInactive(true);
-            }
-        } else if (savingRoll > 9 && savingRoll < 20) {
+        remainingThrows -= 1;
+
+        if (savingRoll >= 1 && savingRoll < 10) {
+            failDeathSave(savingRoll, remainingThrows);
+        } else {
+            passDeathSave(remainingThrows, savingRoll);
+        }
+    }
+
+    private void passDeathSave(int remainingThrows, int savingRoll) {
+        if (savingRoll > 9 && savingRoll < 20) {
             setSucceededDeathSavingThrows(getSucceededDeathSavingThrows()+1);
-            remainingThrows -= 1;
-            System.out.println(getForename() + " has rolled " + savingRoll + " and the death saving throw has succeeded. They have " + remainingThrows + " throws remaining, and a total of "
-                    + getSucceededDeathSavingThrows() + " succeeded throws, and " + getFailedDeathSavingThrows() + " failed throws.");
+
+            printDeathThrowInfo(savingRoll, remainingThrows, "succeeded");
             if(getSucceededDeathSavingThrows() >= 3) {
-                setHitPoints(1);
-                setUnconscious(false);
+                regainConsciousness();
                 System.out.println(getForename() + " has passed 3 death saving throws and regained consciousness.");
             }
         } else if (savingRoll >= 20) {
-            setHitPoints(1);
-            setUnconscious(false);
+            regainConsciousness();
             System.out.println(getForename() + " has rolled " + savingRoll + " and has regained consciousness.");
         }
     }
 
-    public void charm(Character target) {
+    private void failDeathSave(int savingRoll, int remainingThrows) {
+        if (savingRoll == 1) {
+            setFailedDeathSavingThrows(getFailedDeathSavingThrows()+2);
+            remainingThrows -= 1;
+            printDeathThrowInfo(savingRoll, remainingThrows, "failed doubly. Oops");
+        }
+        else {
+            setFailedDeathSavingThrows(getFailedDeathSavingThrows()+1);
+            printDeathThrowInfo(savingRoll, remainingThrows, "failed");
+        }
+        if(getFailedDeathSavingThrows() >= 3) {
+            die();
+        }
+    }
 
+    public void regainConsciousness() {
+        setHitPoints(1);
+        setUnconscious(false);
+        setSucceededDeathSavingThrows(0);
+        setFailedDeathSavingThrows(0);
+        setIntimidated(false);
+        setCharmed(false);
+    }
+
+    public void die() {
+        System.out.println(getForename() + " has failed 3 death saving throws and has died forever.");
+        setInactive(true);
+    }
+
+    public void printDeathThrowInfo(int savingRoll, int remainingThrows, String throwSuccess) {
+        System.out.println(getForename() + " has rolled " + savingRoll + " and the death saving throw has " + throwSuccess + ". They have " + remainingThrows + " throws remaining, and a total of "
+                + getSucceededDeathSavingThrows() + " succeeded throws, and " + getFailedDeathSavingThrows() + " failed throws.");
+    }
+
+    public void charm(Character target) {
+        int charmStrength = diceMap.get("d20").roll();
+        System.out.println("You rolled " + charmStrength + " to charm someone, with charisma modifier " + getCharisma());
+        charmStrength += getCharisma();
+        if (charmStrength > 11) {
+            target.setCharmed(true);
+            System.out.println(target.getForename() + " is charmed by you.");
+        }
+        else {
+            System.out.println("You were not charming enough. " + target.getForename() + " is not interested.");
+        }
     }
 
     public void intimidate(Character target) {
-
+        int intimidationStrength = diceMap.get("d20").roll();
+        System.out.println("You rolled " + intimidationStrength + " to intimidate someone, with charisma modifier " + getCharisma());
+        intimidationStrength += getCharisma();
+        if (intimidationStrength > 11) {
+            target.setIntimidated(true);
+            System.out.println(target.getForename() + " is intimidated by you.");
+        }
+        else {
+            System.out.println("That was boring. " + target.getForename() + " is not intimidated by you.");
+        }
     }
 
     public void takeLongRest() {
-        setHitPoints(maxHitPoints);
+        setHitPoints(getMaxHitPoints());
+        setIntimidated(false);
+        setCharmed(false);
     }
 
     public void takeShortRest() {
-
+        if (getHitPoints() < getMaxHitPoints()) {
+            int halfLostHitPoints = (getMaxHitPoints()-getHitPoints())/2;
+            setHitPoints(getHitPoints()+Math.round(halfLostHitPoints));
+        }
+        setIntimidated(false);
+        setCharmed(false);
     }
 
     public boolean isInactive() {
@@ -258,13 +300,6 @@ public class Character {
         this.race = race;
     }
 
-    public String getAdventurerClass() {
-        return adventurerClass;
-    }
-
-    public void setAdventurerClass(String adventurerClass) {
-        this.adventurerClass = adventurerClass;
-    }
 
     public int getSpellSlots() {
         return spellSlots;
@@ -426,11 +461,47 @@ public class Character {
         this.failedDeathSavingThrows = failedDeathSavingThrows;
     }
 
+    public int getMaxDeathSavingThrows() {
+        return maxDeathSavingThrows;
+    }
+
     public int getTemporaryHitPoints() {
         return temporaryHitPoints;
     }
 
     public void setTemporaryHitPoints(int temporaryHitPoints) {
         this.temporaryHitPoints = temporaryHitPoints;
+    }
+
+    public int getBaseHitPoints() {
+        return baseHitPoints;
+    }
+
+    public void setBaseHitPoints(int baseHitPoints) {
+        this.baseHitPoints = baseHitPoints;
+    }
+
+    public int getMaxHitPoints() {
+        return maxHitPoints;
+    }
+
+    public void setMaxHitPoints(int maxHitPoints) {
+        this.maxHitPoints = maxHitPoints;
+    }
+
+    public int getColumnLocation() {
+        return columnLocation;
+    }
+
+    public void setColumnLocation(int columnLocation) {
+        this.columnLocation = columnLocation;
+    }
+
+    public int getRowLocation() {
+        return rowLocation;
+    }
+
+    public void setRowLocation(int rowLocation) {
+        this.rowLocation = rowLocation;
     }
 }

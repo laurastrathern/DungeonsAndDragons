@@ -11,6 +11,8 @@ public class Game {
     LinkedHashMap<Integer, Character> characterMap = new LinkedHashMap<>();
     LinkedHashMap<Integer, String> actionMap = new LinkedHashMap<>();
 
+    LinkedHashMap<Integer, Spell> spellMap = new LinkedHashMap<>();
+
 
     public void beginGame() {
         System.out.println("A new game has begun.");
@@ -21,19 +23,35 @@ public class Game {
     }
 
     public void setActionMap() {
-        actionMap.put(1, "speak");
-        actionMap.put(2, "attack");
-        actionMap.put(3, "cast a spell");
-        actionMap.put(4, "charm");
-        actionMap.put(5, "intimidate");
-        actionMap.put(6, "investigate");
-        actionMap.put(7, "take a short rest");
-        actionMap.put(8, "take a long rest");
-        actionMap.put(9, "move");
-        actionMap.put(10, "exit game");
+        actionMap.put(1, "attack");
+        actionMap.put(2, "cast a spell");
+        actionMap.put(3, "charm");
+        actionMap.put(4, "intimidate");
+        actionMap.put(5, "investigate");
+        actionMap.put(6, "take a short rest");
+        actionMap.put(7, "take a long rest");
+        actionMap.put(8, "move");
+        actionMap.put(9, "exit game");
     }
 
-
+    public void setSpellMap() {
+        Spell spell1 = new Spell("Acid Splash", 5, 27, 5, "Attack", "You hurl a bubble of acid.");
+        Spell spell2 = new Spell("Animal Friendship", 4,5, 60, "Other", "This spell lets you convince a beast that you mean it no harm.");
+        Spell spell3 = new Spell("Anti-magic Field", 5,10, 60, "Other", "A 10-foot-radius invisible sphere of antimagic surrounds you.");
+        Spell spell4 = new Spell("Black Tentacles", 4, 27, 1, "Attack", "Squirming, ebony tentacles fill a 20-foot square on ground");
+        Spell spell5 = new Spell("Snilloc's Snowball Swarm", 6, 30, 5, "Attack", "A flurry of magic snowballs erupts.");
+        Spell spell6 = new Spell("Aura of Vitality", 4, 20, 1, "Heal");
+        Spell spell7 = new Spell("Acid Arrow", 4, 30, 10, "Attack", "A shimmering green arrow streaks toward a target within range and bursts in a spray of acid. ");
+        Spell spell8 = new Spell("Cure Wounds", 3, 1, 1, "Heal", "At your touch, their wounds are healed.");
+        spellMap.put(1, spell1);
+        spellMap.put(2, spell2);
+        spellMap.put(3, spell3);
+        spellMap.put(4, spell4);
+        spellMap.put(5, spell5);
+        spellMap.put(6, spell6);
+        spellMap.put(7, spell7);
+        spellMap.put(8, spell8);
+    }
 
     public void getCharacterAction() {
         while (activePlayerInGame()) {
@@ -45,28 +63,34 @@ public class Game {
                 else {
                     switch (getChosenAction(character)) {
                         case 1:
-                            character.speak(getDialogue(), getChosenTarget());
-                            break;
-                        case 2:
                             character.attack(getChosenTarget(), getChosenWeapon(character));
                             break;
-                        case 3:
+                        case 2:
                             character.castSpellOnCharacter(getChosenTarget(), getChosenSpell(character));
                             break;
-                        case 7:
+                        case 3:
+                            character.charm(getChosenTarget());
+                            break;
+                        case 4:
+                            character.intimidate(getChosenTarget());
+                            break;
+                        case 5:
+
+                            break;
+                        case 6:
                             character.takeShortRest();
                             break;
-                        case 8:
+                        case 7:
                             character.takeLongRest();
                             break;
-                        case 10:
+                        case 9:
                             character.setInactive(true);
                             break;
                     }
                 }
             }
             removeExitedCharacters();
-            addNewCharacters();
+
         }
     }
 
@@ -146,13 +170,6 @@ public class Game {
         return chosenSpell;
     }
 
-    public String getDialogue() {
-        System.out.println("Type dialogue here:");
-        String dialogue = input.nextLine();
-        return dialogue;
-    }
-
-
     public void getDeathSave(Character character) {
         System.out.println("Hello " + character.getForename() + ". Press 1 to try to save yourself from death. Alternatively, press 2 to do nothing.");
         int deathSave = input.nextInt();
@@ -164,11 +181,6 @@ public class Game {
             System.out.println("You choose to do nothing." );
         }
     }
-
-
-
-
-
     public void addCharacterToGame(Character character) {
         characterMap.put(characterMap.size()+1, character);
     }
@@ -188,22 +200,14 @@ public class Game {
 
     }
 
-    public void addNewCharacters() {
-        System.out.println("To add new characters to the game, press 1.  To continue, press 2");
-        int newCharacters = input.nextInt();
-        if (newCharacters == 1) {
-            System.out.println("Enter the details in the following format: (String forename, String surname, String race, String adventurerClass, int hitPoints, int armourClass, int strength, int charisma, int wisdom)");
-        }
-
-    }
 
     public void beginCombat() {
 
     }
 
     public void generateNPC() {
-        Character character1 = new Character(true, "Schokolade", "Kuhlschrank", "Dwarf", "Monk", 25, 16, 5, -3, 2);
-        Character character2 = new Character(true, "Nelja", "Valkoinen", "Elf", "Fighter", 20, 15, 3, 1, 4);
+        Character character1 = new Monk("Schokolade", "Kuhlschrank", "Dwarf", 16, 5, -3, 2, 6);
+        Character character2 = new Fighter("Nelja", "Valkoinen", "Elf",  15, 2, 4, 3, 5);
         characterMap.put(characterMap.size()+1, character1);
         characterMap.put(characterMap.size()+1, character2);
         Weapon spear = new Weapon("Spear", 3, 90);
@@ -212,26 +216,19 @@ public class Game {
         Weapon grenade = new Weapon("Grenade", 100, 200);
         Weapon crossBow = new Weapon("Selina", 4, 100);
 
-        Spell spell1 = new Spell("Acid Splash", 5, 27, 5, "Attack");
-        Spell spell2 = new Spell("Animal Friendship", 4,5, 60, "Other");
-        Spell spell3 = new Spell("Anti-magic Field", 5,50, 60, "Other");
-        Spell spell4 = new Spell("Black Tentacles", 4, 27, 1, "Attack");
-        Spell spell5 = new Spell("Snilloc's Snowball Swarm", 6, 30, 5, "Attack");
-        Spell spell6 = new Spell("Aura of Vitality", 4, 20, 1, "Heal");
-
         character1.carryWeapon(axe);
         character1.carryWeapon(grenade);
         character2.carryWeapon(spear);
         character2.carryWeapon(sword);
         character2.carryWeapon(crossBow);
 
-        character1.learnSpell(spell1);
-        character1.learnSpell(spell2);
-        character1.learnSpell(spell6);
-        character2.learnSpell(spell1);
-        character2.learnSpell(spell3);
-        character2.learnSpell(spell4);
-        character2.learnSpell(spell5);
+        character1.learnSpell(spellMap.get(4));
+        character1.learnSpell(spellMap.get(5));
+        character1.learnSpell(spellMap.get(8));
+        character2.learnSpell(spellMap.get(1));
+        character2.learnSpell(spellMap.get(6));
+        character2.learnSpell(spellMap.get(7));
+        character2.learnSpell(spellMap.get(8));
         for (Integer key: characterMap.keySet()) {
             Character character = characterMap.get(key);
             System.out.println(key + ": " + character.getForename() + " is added to the game.");

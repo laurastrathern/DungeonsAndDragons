@@ -45,6 +45,19 @@ public abstract class ProficiencyItem {
         this.effect = effect;
     }
 
+    public int causeDamage(Character target, Dice die) {
+        System.out.println(target.getForename() + " is hit.");
+
+        int roll = die.roll();
+        int damage  =  roll + getStrength();
+        System.out.println("You rolled " + roll + " with an attack bonus of " + getStrength());
+        if (getEffect() != null) {
+            System.out.println(getEffect());
+        }
+        target.takeDamage(damage);
+        return damage;
+    }
+
 
 
 }

@@ -5,9 +5,10 @@ public class DndApp {
     public static void main(String[] args) {
 
         Game game = new Game();
+        game.setSpellMap();
 
-        Character character1 = new Character("Yksi", "Erdbeere", "Halfling", "Ranger", 25, 17, 4, -2, 2);
-        Character character2 = new Character("Malinova", "Borboleta", "Triton", "Warlock", 23, 16, 3, 4, 3);
+        Character character1 = new Ranger("Yksi", "Erdbeere", "Halfling", 17, 4, -2, 2, 6);
+        Character character2 = new Warlock("Malinova", "Borboleta", "Triton", 16, 3, 4, 3, 5);
 
         Weapon longBow = new Weapon("Long Bow", 3, 90);
         Weapon broadSword = new Weapon("Gina", 2, 5);
@@ -15,33 +16,19 @@ public class DndApp {
         Weapon slingshot = new Weapon("Slingshot", 1, 50);
         Weapon ninjaStars = new Weapon("Ninja Stars", 4, 100);
 
-//        Spell spell1 = new SpellBuilder().setName("Acid Splash").setStrength(5).setRangeInMeters(27).setHoursEffective(0.25).createSpell();
-//        Spell spell2 = new SpellBuilder().setName("Animal Friendship").setStrength(4).setRangeInMeters(5).createSpell();
-//        Spell spell3 = new SpellBuilder().setName("Anti-magic Field").setStrength(5).setRangeInMeters(50).createSpell();
-//        Spell spell4 = new SpellBuilder().setName("Black Tentacles").setStrength(4).setRangeInMeters(27).setHoursEffective(0.20).createSpell();
-//        Spell spell5 = new SpellBuilder().setName("Snilloc's Snowball Swarm").setStrength(6).setRangeInMeters(30).createSpell();
-
-        Spell spell1 = new Spell("Acid Splash", 5, 27, 5, "Attack");
-        Spell spell2 = new Spell("Animal Friendship", 4,5, 60, "Other");
-        Spell spell3 = new Spell("Anti-magic Field", 5,50, 60, "Other");
-        Spell spell4 = new Spell("Black Tentacles", 4, 27, 1, "Attack");
-        Spell spell5 = new Spell("Snilloc's Snowball Swarm", 6, 30, 5, "Attack");
-        Spell spell6 = new Spell("Aura of Vitality", 4, 20, 1, "Heal");
-
         character1.carryWeapon(longBow);
         character1.carryWeapon(broadSword);
         character2.carryWeapon(shortSword);
         character2.carryWeapon(slingshot);
         character2.carryWeapon(ninjaStars);
 
-        character1.learnSpell(spell1);
-        character1.learnSpell(spell2);
-        character1.learnSpell(spell6);
-        character2.learnSpell(spell1);
-        character2.learnSpell(spell3);
-        character2.learnSpell(spell4);
-        character2.learnSpell(spell5);
-
+        character1.learnSpell(game.spellMap.get(1));
+        character1.learnSpell(game.spellMap.get(2));
+        character1.learnSpell(game.spellMap.get(7));
+        character2.learnSpell(game.spellMap.get(1));
+        character2.learnSpell(game.spellMap.get(4));
+        character2.learnSpell(game.spellMap.get(5));
+        character2.learnSpell(game.spellMap.get(6));
 
         game.addCharacterToGame(character1);
         game.addCharacterToGame(character2);

@@ -5,9 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="06808499-00cc-43e8-9eed-335d1c4b2e38" name="Changes" comment="Fix Death Saving Throws Again and Healing and Other Spells">
+      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/Barbarian.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/Fighter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/InanimateObjects.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/Monk.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/Ranger.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/Warlock.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Character.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Character.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/DndApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/DndApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Location.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Location.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/ProficiencyItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/ProficiencyItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Spell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Spell.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/SpellBuilder.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +136,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663762970096</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fix Death Saving Throws Again and Healing and Other Spells">
+      <created>1663776550675</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1663776550675</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -155,11 +173,6 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="1" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/dnd/Game.java</url>
-          <line>149</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
