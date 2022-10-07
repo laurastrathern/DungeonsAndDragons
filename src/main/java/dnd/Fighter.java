@@ -24,5 +24,7 @@ public class Fighter extends Character {
         setBaseHitPoints(10);
         setMaxHitPoints(getBaseHitPoints()+getConstitution());
         setHitPoints(getMaxHitPoints());
+        setHitDie(diceMap.get("d10"));
+        setActionDie(diceMap.get("d20"));
     }
 }

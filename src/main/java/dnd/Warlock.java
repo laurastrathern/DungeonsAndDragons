@@ -22,5 +22,7 @@ public class Warlock extends Character {
         setBaseHitPoints(8);
         setMaxHitPoints(getBaseHitPoints()+getConstitution());
         setHitPoints(getMaxHitPoints());
+        setHitDie(diceMap.get("d8"));
+        setActionDie(diceMap.get("d20"));
     }
 }

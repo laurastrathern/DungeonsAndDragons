@@ -4,21 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06808499-00cc-43e8-9eed-335d1c4b2e38" name="Changes" comment="Fix Death Saving Throws Again and Healing and Other Spells">
-      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/Barbarian.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/Fighter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/InanimateObjects.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/Monk.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/Ranger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dnd/Warlock.java" afterDir="false" />
+    <list default="true" id="06808499-00cc-43e8-9eed-335d1c4b2e38" name="Changes" comment="Refactor Death Saving Throws, long rest, short rest, character child classes, charm and intimidate">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Barbarian.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Barbarian.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Character.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Character.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/DndApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/DndApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Fighter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Fighter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Location.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Location.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/ProficiencyItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/ProficiencyItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Spell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Spell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/SpellBuilder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Monk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Monk.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Ranger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Ranger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Warlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Warlock.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,7 +137,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663776550675</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Refactor Death Saving Throws, long rest, short rest, character child classes, charm and intimidate">
+      <created>1665162595128</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1665162595128</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -164,7 +165,8 @@
     <MESSAGE value="Add Death Saving Throws" />
     <MESSAGE value="Fix Death Saving Throws and Add Dice" />
     <MESSAGE value="Fix Death Saving Throws Again and Healing and Other Spells" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix Death Saving Throws Again and Healing and Other Spells" />
+    <MESSAGE value="Refactor Death Saving Throws, long rest, short rest, character child classes, charm and intimidate" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor Death Saving Throws, long rest, short rest, character child classes, charm and intimidate" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

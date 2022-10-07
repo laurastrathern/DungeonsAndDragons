@@ -46,12 +46,17 @@ public abstract class Character {
     private int rowLocation;
     LinkedHashMap<String, Dice> diceMap = new LinkedHashMap<>();
 
+    private Dice actionDie;
+    private Dice hitDie;
+
     public void setDiceMap() {
         Dice d20 = new Dice(20);
+        Dice d12 = new Dice(12);
         Dice d10 = new Dice(10);
         Dice d8 = new Dice(8);
         Dice d6 = new Dice(6);
         diceMap.put("d20", d20);
+        diceMap.put("d12", d12);
         diceMap.put("d10", d10);
         diceMap.put("d8", d8);
         diceMap.put("d6", d6);
@@ -94,19 +99,23 @@ public abstract class Character {
 
     public void attack(Character target, ProficiencyItem attackItem) {
 
-        int attackStrength = diceMap.get("d20").roll();
+        int attackStrength = getActionDie().roll();
 
         if (isIntimidated()) {
-            attackStrength = Math.min(attackStrength, diceMap.get("d20").roll());
+            int disadvantageRoll = getActionDie().roll();
+            attackStrength = Math.min(attackStrength, disadvantageRoll);
+            System.out.println("You roll with disadvantage because you are intimidated. Your higher roll was " + Math.max(attackStrength, disadvantageRoll));
         }
         if(target.isIntimidated() || target.isCharmed()) {
-            attackStrength = Math.max(attackStrength, diceMap.get("d20").roll());
+            int advantageRoll = getActionDie().roll();
+            attackStrength = Math.max(attackStrength, advantageRoll);
+            System.out.println("You roll with advantage because your target is intimidated or charmed. Your lower roll was " + Math.min(attackStrength, advantageRoll));
         }
 
         attackStrength = addModifier(attackItem, attackStrength);
 
         if (target.hitSuccessful(attackStrength)) {
-            attackItem.causeDamage(target, diceMap.get("d8"));
+            attackItem.causeDamage(target, getHitDie());
         }
         else {
             System.out.println("Attack failed.");
@@ -141,7 +150,7 @@ public abstract class Character {
 
     public void healACharacter(Character target, ProficiencyItem healingItem) {
 
-        int healingStrength = diceMap.get("d20").roll();
+        int healingStrength = getActionDie().roll();
         healingStrength = addModifier(healingItem, healingStrength);
 
         if (healingStrength >= 11) {
@@ -167,7 +176,7 @@ public abstract class Character {
 
     public void makeDeathSave() {
         int remainingThrows = getMaxDeathSavingThrows() - (getFailedDeathSavingThrows() + getSucceededDeathSavingThrows());
-        int savingRoll = diceMap.get("d20").roll();
+        int savingRoll = getActionDie().roll();
         remainingThrows -= 1;
 
         if (savingRoll >= 1 && savingRoll < 10) {
@@ -227,7 +236,7 @@ public abstract class Character {
     }
 
     public void charm(Character target) {
-        int charmStrength = diceMap.get("d20").roll();
+        int charmStrength = getActionDie().roll();
         System.out.println("You rolled " + charmStrength + " to charm someone, with charisma modifier " + getCharisma());
         charmStrength += getCharisma();
         if (charmStrength > 11) {
@@ -240,7 +249,7 @@ public abstract class Character {
     }
 
     public void intimidate(Character target) {
-        int intimidationStrength = diceMap.get("d20").roll();
+        int intimidationStrength = getActionDie().roll();
         System.out.println("You rolled " + intimidationStrength + " to intimidate someone, with charisma modifier " + getCharisma());
         intimidationStrength += getCharisma();
         if (intimidationStrength > 11) {
@@ -503,5 +512,21 @@ public abstract class Character {
 
     public void setRowLocation(int rowLocation) {
         this.rowLocation = rowLocation;
+    }
+
+    public Dice getHitDie() {
+        return hitDie;
+    }
+
+    public void setHitDie(Dice hitDie) {
+        this.hitDie = hitDie;
+    }
+
+    public Dice getActionDie() {
+        return actionDie;
+    }
+
+    public void setActionDie(Dice actionDie) {
+        this.actionDie = actionDie;
     }
 }

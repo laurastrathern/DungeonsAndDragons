@@ -171,14 +171,17 @@ public class Game {
     }
 
     public void getDeathSave(Character character) {
-        System.out.println("Hello " + character.getForename() + ". Press 1 to try to save yourself from death. Alternatively, press 2 to do nothing.");
+        System.out.println("Hello " + character.getForename() + ". Press 1 to try to save yourself from death. Alternatively, press 2 to do nothing or press 3 to exit the game.");
         int deathSave = input.nextInt();
 
         if (deathSave == 1) {
             character.makeDeathSave();
         }
-        else {
+        else if (deathSave == 2){
             System.out.println("You choose to do nothing." );
+        }
+        else {
+            character.setInactive(true);
         }
     }
     public void addCharacterToGame(Character character) {

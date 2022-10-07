@@ -22,5 +22,7 @@ public class Barbarian extends Character {
         setBaseHitPoints(12);
         setMaxHitPoints(getBaseHitPoints()+getConstitution());
         setHitPoints(getMaxHitPoints());
+        setHitDie(diceMap.get("d12"));
+        setActionDie(diceMap.get("d20"));
     }
 }
