@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06808499-00cc-43e8-9eed-335d1c4b2e38" name="Changes" comment="Refactor Death Saving Throws, long rest, short rest, character child classes, charm and intimidate">
+    <list default="true" id="06808499-00cc-43e8-9eed-335d1c4b2e38" name="Changes" comment="Refactor hit die and action die.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Barbarian.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Barbarian.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Character.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Character.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Fighter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Fighter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Monk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Monk.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Ranger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Ranger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Warlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Warlock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/DndApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/DndApp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,7 +138,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665162595128</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Refactor hit die and action die.">
+      <created>1665164398027</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1665164398027</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -166,7 +167,8 @@
     <MESSAGE value="Fix Death Saving Throws and Add Dice" />
     <MESSAGE value="Fix Death Saving Throws Again and Healing and Other Spells" />
     <MESSAGE value="Refactor Death Saving Throws, long rest, short rest, character child classes, charm and intimidate" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor Death Saving Throws, long rest, short rest, character child classes, charm and intimidate" />
+    <MESSAGE value="Refactor hit die and action die." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor hit die and action die." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

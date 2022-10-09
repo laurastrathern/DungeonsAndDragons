@@ -99,17 +99,18 @@ public abstract class Character {
 
     public void attack(Character target, ProficiencyItem attackItem) {
 
-        int attackStrength = getActionDie().roll();
+        int attackRoll = getActionDie().roll();
+        int attackStrength = attackRoll;
 
-        if (isIntimidated()) {
+        if (isIntimidated() && !target.isIntimidated()) {
             int disadvantageRoll = getActionDie().roll();
-            attackStrength = Math.min(attackStrength, disadvantageRoll);
-            System.out.println("You roll with disadvantage because you are intimidated. Your higher roll was " + Math.max(attackStrength, disadvantageRoll));
+            attackStrength = Math.min(attackRoll, disadvantageRoll);
+            System.out.println("You roll with disadvantage because you are intimidated. Your higher roll was " + Math.max(attackRoll, disadvantageRoll));
         }
         if(target.isIntimidated() || target.isCharmed()) {
             int advantageRoll = getActionDie().roll();
-            attackStrength = Math.max(attackStrength, advantageRoll);
-            System.out.println("You roll with advantage because your target is intimidated or charmed. Your lower roll was " + Math.min(attackStrength, advantageRoll));
+            attackStrength = Math.max(attackRoll, advantageRoll);
+            System.out.println("You roll with advantage because your target is intimidated or charmed. Your lower roll was " + Math.min(attackRoll, advantageRoll));
         }
 
         attackStrength = addModifier(attackItem, attackStrength);
