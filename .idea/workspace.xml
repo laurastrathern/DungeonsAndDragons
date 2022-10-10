@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06808499-00cc-43e8-9eed-335d1c4b2e38" name="Changes" comment="Refactor hit die and action die.">
+    <list default="true" id="06808499-00cc-43e8-9eed-335d1c4b2e38" name="Changes" comment="Fix disadvantage roll">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/Character.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/Character.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dnd/DndApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/DndApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dnd/ProficiencyItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dnd/ProficiencyItem.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,7 +147,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665164398027</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Fix disadvantage roll">
+      <created>1665341202256</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1665341202256</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -168,7 +177,8 @@
     <MESSAGE value="Fix Death Saving Throws Again and Healing and Other Spells" />
     <MESSAGE value="Refactor Death Saving Throws, long rest, short rest, character child classes, charm and intimidate" />
     <MESSAGE value="Refactor hit die and action die." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor hit die and action die." />
+    <MESSAGE value="Fix disadvantage roll" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix disadvantage roll" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -54,7 +54,7 @@ public abstract class ProficiencyItem {
         if (getEffect() != null) {
             System.out.println(getEffect());
         }
-        target.takeDamage(damage);
+
         return damage;
     }
 

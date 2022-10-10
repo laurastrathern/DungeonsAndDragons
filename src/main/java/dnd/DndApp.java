@@ -9,6 +9,7 @@ public class DndApp {
 
         Character character1 = new Ranger("Yksi", "Erdbeere", "Halfling", 17, 4, -2, 2, 6);
         Character character2 = new Warlock("Malinova", "Borboleta", "Triton", 16, 3, 4, 3, 5);
+        Character kellysCharcater = new Monk("Yeji", "Mercury", "Elf", 18, 1,0,4,2);
 
         Weapon longBow = new Weapon("Long Bow", 3, 90);
         Weapon broadSword = new Weapon("Gina", 2, 5);
@@ -21,6 +22,8 @@ public class DndApp {
         character2.carryWeapon(shortSword);
         character2.carryWeapon(slingshot);
         character2.carryWeapon(ninjaStars);
+        kellysCharcater.carryWeapon(longBow);
+        kellysCharcater.carryWeapon(ninjaStars);
 
         character1.learnSpell(game.spellMap.get(1));
         character1.learnSpell(game.spellMap.get(2));
@@ -29,9 +32,11 @@ public class DndApp {
         character2.learnSpell(game.spellMap.get(4));
         character2.learnSpell(game.spellMap.get(5));
         character2.learnSpell(game.spellMap.get(6));
+        kellysCharcater.learnSpell(game.spellMap.get(5));
 
-        game.addCharacterToGame(character1);
+        //game.addCharacterToGame(character1);
         game.addCharacterToGame(character2);
+        game.addCharacterToGame(kellysCharcater);
 
         game.beginGame();
 

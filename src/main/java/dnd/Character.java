@@ -100,27 +100,48 @@ public abstract class Character {
     public void attack(Character target, ProficiencyItem attackItem) {
 
         int attackRoll = getActionDie().roll();
-        int attackStrength = attackRoll;
 
         if (isIntimidated() && !target.isIntimidated()) {
-            int disadvantageRoll = getActionDie().roll();
-            attackStrength = Math.min(attackRoll, disadvantageRoll);
-            System.out.println("You roll with disadvantage because you are intimidated. Your higher roll was " + Math.max(attackRoll, disadvantageRoll));
+            attackRoll = rollWithDisadvantage(attackRoll);
         }
-        if(target.isIntimidated() || target.isCharmed()) {
-            int advantageRoll = getActionDie().roll();
-            attackStrength = Math.max(attackRoll, advantageRoll);
-            System.out.println("You roll with advantage because your target is intimidated or charmed. Your lower roll was " + Math.min(attackRoll, advantageRoll));
+        if((target.isIntimidated() || target.isCharmed()) && !isIntimidated()) {
+            attackRoll = rollWithAdvantage(attackRoll);
         }
+        if (attackRoll == getActionDie().getSides()) {
+            System.out.println("You rolled a natural 20. Your attack causes double damage!");
+            int doubleDamage = attackItem.causeDamage(target, getHitDie())*2;
+            target.takeDamage(doubleDamage);
+        } else if (attackRoll == 1) {
+            System.out.println("You rolled a natural 1. You trip on a rock as you try to attack and fall on your face.");
+            if((target.isIntimidated() || target.isCharmed())) {
+                target.setIntimidated(false);
+                target.setCharmed(false);
+                System.out.println("If " + target.getForename() + " found you charming or intimidating, they sure don't anymore.");
+            }
+        } else {
+            int attackStrength = addModifier(attackItem, attackRoll);
 
-        attackStrength = addModifier(attackItem, attackStrength);
+            if (target.hitSuccessful(attackStrength)) {
+                int damage = attackItem.causeDamage(target, getHitDie());
+                target.takeDamage(damage);
+            }
+            else {
+                System.out.println("Attack failed.");
+            }
+        }
+    }
 
-        if (target.hitSuccessful(attackStrength)) {
-            attackItem.causeDamage(target, getHitDie());
-        }
-        else {
-            System.out.println("Attack failed.");
-        }
+    private int rollWithDisadvantage(int attackRoll) {
+        int disadvantageRoll = getActionDie().roll();
+        System.out.println("You roll with disadvantage. Your higher roll was " + Math.max(attackRoll, disadvantageRoll));
+        return Math.min(attackRoll, disadvantageRoll);
+
+    }
+
+    private int rollWithAdvantage(int initialRoll) {
+        int advantageRoll = getActionDie().roll();
+        System.out.println("You roll with advantage. Your lower roll was " + Math.min(initialRoll, advantageRoll));
+        return Math.max(initialRoll, advantageRoll);
     }
 
     private int addModifier(ProficiencyItem actionItem, int actionStrength) {
@@ -139,13 +160,22 @@ public abstract class Character {
     }
 
     public void takeDamage(int damage) {
-        if (damage >= getHitPoints()) {
+        if (isUnconscious()) {
+            int automaticDeathSaveFail = 0;
+            failDeathSave(automaticDeathSaveFail);
+        }
+        if (damage >= getHitPoints() && !isUnconscious()) {
             setUnconscious(true);
+            setIntimidated(false);
+            setCharmed(false);
+            System.out.println("Oh dear, it looks like " + getForename() + " has passed out, leaving all their belongings unguarded.");
         }
         setHitPoints(getHitPoints()-damage);
         System.out.println(getForename() + " has taken " + damage + " points of damage, and now has " + getHitPoints() + " hit points remaining.");
-        if (isUnconscious()) {
-            System.out.println("Oh dear, it looks like " + getForename() + " has passed out, leaving all their belongings unguarded.");
+
+        if (-getHitPoints() > getMaxHitPoints()) {
+            System.out.println("Wow, that was brutal. " + getForename() + " is dead.");
+            setInactive(true);
         }
     }
 
@@ -173,25 +203,24 @@ public abstract class Character {
             setUnconscious(false);
             System.out.println(getForename() + " has regained consciousness.  Hopefully they are not concussed.");
         }
+        setIntimidated(false);
     }
 
     public void makeDeathSave() {
-        int remainingThrows = getMaxDeathSavingThrows() - (getFailedDeathSavingThrows() + getSucceededDeathSavingThrows());
         int savingRoll = getActionDie().roll();
-        remainingThrows -= 1;
 
         if (savingRoll >= 1 && savingRoll < 10) {
-            failDeathSave(savingRoll, remainingThrows);
+            failDeathSave(savingRoll);
         } else {
-            passDeathSave(remainingThrows, savingRoll);
+            passDeathSave(savingRoll);
         }
     }
 
-    private void passDeathSave(int remainingThrows, int savingRoll) {
+    private void passDeathSave(int savingRoll) {
         if (savingRoll > 9 && savingRoll < 20) {
             setSucceededDeathSavingThrows(getSucceededDeathSavingThrows()+1);
 
-            printDeathThrowInfo(savingRoll, remainingThrows, "succeeded");
+            printDeathThrowInfo(savingRoll, "succeeded");
             if(getSucceededDeathSavingThrows() >= 3) {
                 regainConsciousness();
                 System.out.println(getForename() + " has passed 3 death saving throws and regained consciousness.");
@@ -202,16 +231,22 @@ public abstract class Character {
         }
     }
 
-    private void failDeathSave(int savingRoll, int remainingThrows) {
+    private void failDeathSave(int savingRoll) {
         if (savingRoll == 1) {
             setFailedDeathSavingThrows(getFailedDeathSavingThrows()+2);
-            remainingThrows -= 1;
-            printDeathThrowInfo(savingRoll, remainingThrows, "failed doubly. Oops");
+            String throwSuccess = "failed doubly. Oops";
+            printDeathThrowInfo(savingRoll, throwSuccess);
+        }
+        else if (savingRoll == 0) {
+            setFailedDeathSavingThrows(getFailedDeathSavingThrows()+1);
+            System.out.println(getForename() + " has lost 1 death saving throw due to being attacked while unconscious.");
         }
         else {
             setFailedDeathSavingThrows(getFailedDeathSavingThrows()+1);
-            printDeathThrowInfo(savingRoll, remainingThrows, "failed");
+            String throwSuccess = "failed";
+            printDeathThrowInfo(savingRoll, throwSuccess);
         }
+
         if(getFailedDeathSavingThrows() >= 3) {
             die();
         }
@@ -222,8 +257,6 @@ public abstract class Character {
         setUnconscious(false);
         setSucceededDeathSavingThrows(0);
         setFailedDeathSavingThrows(0);
-        setIntimidated(false);
-        setCharmed(false);
     }
 
     public void die() {
@@ -231,15 +264,15 @@ public abstract class Character {
         setInactive(true);
     }
 
-    public void printDeathThrowInfo(int savingRoll, int remainingThrows, String throwSuccess) {
-        System.out.println(getForename() + " has rolled " + savingRoll + " and the death saving throw has " + throwSuccess + ". They have " + remainingThrows + " throws remaining, and a total of "
+    public void printDeathThrowInfo(int savingRoll, String throwSuccess) {
+        System.out.println(getForename() + " has rolled " + savingRoll + " and the death saving throw has " + throwSuccess + ". They have a total of "
                 + getSucceededDeathSavingThrows() + " succeeded throws, and " + getFailedDeathSavingThrows() + " failed throws.");
     }
 
     public void charm(Character target) {
-        int charmStrength = getActionDie().roll();
-        System.out.println("You rolled " + charmStrength + " to charm someone, with charisma modifier " + getCharisma());
-        charmStrength += getCharisma();
+        int charmRoll = getActionDie().roll();
+        System.out.println("You rolled " + charmRoll + " to charm someone, with charisma modifier " + getCharisma());
+        int charmStrength = charmRoll + getCharisma();
         if (charmStrength > 11) {
             target.setCharmed(true);
             System.out.println(target.getForename() + " is charmed by you.");
@@ -255,7 +288,7 @@ public abstract class Character {
         intimidationStrength += getCharisma();
         if (intimidationStrength > 11) {
             target.setIntimidated(true);
-            System.out.println(target.getForename() + " is intimidated by you.");
+            System.out.println("Wow, scary! " + target.getForename() + " is intimidated by you.");
         }
         else {
             System.out.println("That was boring. " + target.getForename() + " is not intimidated by you.");
