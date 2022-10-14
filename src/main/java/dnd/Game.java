@@ -41,7 +41,7 @@ public class Game {
         Spell spell4 = new Spell("Black Tentacles", 4, 27, 1, "Attack", "Squirming, ebony tentacles fill a 20-foot square on ground");
         Spell spell5 = new Spell("Snilloc's Snowball Swarm", 6, 30, 5, "Attack", "A flurry of magic snowballs erupts.");
         Spell spell6 = new Spell("Aura of Vitality", 4, 20, 1, "Heal");
-        Spell spell7 = new Spell("Acid Arrow", 4, 30, 10, "Attack", "A shimmering green arrow streaks toward a target within range and bursts in a spray of acid. ");
+        Spell spell7 = new Spell("Acid Arrows", 4, 30, 10, "Attack", "A shimmering green arrow streaks toward a target within range and bursts in a spray of acid. ");
         Spell spell8 = new Spell("Cure Wounds", 3, 1, 1, "Heal", "At your touch, their wounds are healed.");
         spellMap.put(1, spell1);
         spellMap.put(2, spell2);

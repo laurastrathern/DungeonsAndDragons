@@ -291,7 +291,7 @@ public abstract class Character {
             System.out.println("Wow, scary! " + target.getForename() + " is intimidated by you.");
         }
         else {
-            System.out.println("That was boring. " + target.getForename() + " is not intimidated by you.");
+            System.out.println("That was boring.  " + target.getForename() + " is not intimidated by you.");
         }
     }
 
