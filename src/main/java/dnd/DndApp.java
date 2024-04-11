@@ -42,6 +42,7 @@ public class DndApp {
 
         game.addCharacterToGame(character1);
         game.addCharacterToGame(character2);
+        game.addCharacterToGame(character3);
 
         game.beginGame();
 
