@@ -43,6 +43,7 @@ public class Game {
         Spell spell6 = new Spell("Aura of Vitality", 4, 20, 1, "Heal");
         Spell spell7 = new Spell("Acid Arrows", 4, 30, 10, "Attack", "A shimmering green arrow streaks toward a target within range and bursts in a spray of acid. ");
         Spell spell8 = new Spell("Cure Wounds", 3, 1, 1, "Heal", "At your touch, their wounds are healed.");
+        Spell spell9 = new Spell("Cone of Cold", 5, 20, 1, "Attack", "A blast of cold air erupts from your hands. Any creature killed by this spell becomes a frozen statue until it thaws.");
         spellMap.put(1, spell1);
         spellMap.put(2, spell2);
         spellMap.put(3, spell3);
@@ -51,6 +52,8 @@ public class Game {
         spellMap.put(6, spell6);
         spellMap.put(7, spell7);
         spellMap.put(8, spell8);
+        spellMap.put(9, spell9);
+        spellMap.put(10, new Spell("Dust Devil", 2, 20, 1, "Attack", "Choose an unoccupied 5-foot cube of air that you can see within range. An elemental force that resembles a dust devil appears in the cube."));
     }
 
     public void getCharacterAction() {
@@ -95,7 +98,7 @@ public class Game {
     }
 
     private boolean activePlayerInGame() {
-        return characterMap.isEmpty() == false;
+        return !characterMap.isEmpty();
     }
 
     public void provideActionOptions(Character character) {
