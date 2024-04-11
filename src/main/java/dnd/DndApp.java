@@ -18,6 +18,7 @@ public class DndApp {
         Weapon ninjaStars = new Weapon("Ninja Stars", 4, 100);
         Weapon mace = new Weapon("Mace", 3, 10);
         Weapon javelin = new Weapon("Javelin", 2, 120);
+        Weapon sickle = new Weapon("Sickle", 2, 4);
 
         character1.carryWeapon(longBow);
         character1.carryWeapon(broadSword);
@@ -26,6 +27,7 @@ public class DndApp {
         character2.carryWeapon(ninjaStars);
         character3.carryWeapon(mace);
         character3.carryWeapon(javelin);
+        character3.carryWeapon(sickle);
 
         character1.learnSpell(game.spellMap.get(1));
         character1.learnSpell(game.spellMap.get(2));
